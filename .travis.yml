@@ -1,0 +1,4 @@
+# command to install dependencies
+before_install:
+ - sudo apt-get install plotutils
+script: pic2plot -Tsvg FluxFSSyncSD.pic >FluxFSSyncSD.svg

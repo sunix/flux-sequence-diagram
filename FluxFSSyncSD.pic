@@ -1,0 +1,66 @@
+.PS
+# to generate the diagram, download sequence.pic from http://www.umlgraph.org/ 
+# pic2plot -Tsvg FluxFSSyncSD.pic >FluxFSSyncSD.svg
+copy "sequence.pic";
+
+# Object definition
+actor(U1,"User 1");
+actor(U2,"User 2");
+object(E1,"Eclipse 1");
+object(E2,"Eclipse 2");
+object(N,"NodeJS WS");
+
+step();
+
+
+
+# Message exchange
+message(E1,N,"projectConnected");
+message(E2,N,"projectConnected");
+message(N,E1,"projectConnected");
+message(N,E2,"projectConnected");
+
+active(E1);
+step();
+
+message(U1,E1,"modify file1");
+
+active(N);
+message(E1,N,"resourceChanged(file1)");
+step();
+active(E2);
+message(N,E2,"resourceChanged(file1)");
+message(E1,N,"resourceStored(file1)");
+message(N,E2,"resourceStored(file1)");
+step();
+inactive(N)
+inactive(E1);
+
+step();
+
+active(N);
+active(E1);
+message(E2,N, "getResourceRequest(file1)");
+message(N,E1,"getResourceRequest(file1)");
+step();
+inactive(N);
+
+step();
+
+active(N);
+message(E1,N,"getResourceResponse(file1Content)");
+step();
+inactive(E1);
+message(N,E2,"getResourceResponse(file1Content)");
+step();
+inactive(N);
+message(E2,U2,"file1 has changed, refresh!");
+step();
+
+# Object lifeline completion
+complete(U1);
+complete(U2);
+complete(E1);
+complete(E2);
+complete(N);
+.PE
